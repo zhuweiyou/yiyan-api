@@ -1,0 +1,13 @@
+{
+    "private": true,
+    "name": "yiyan-api",
+    "version": "0.0.0",
+    "description": "Yiyan API",
+    "scripts": {
+        "yiyan-puppeteer": "node ./yiyan-puppeteer/index.test.mjs"
+    },
+    "dependencies": {
+        "puppeteer": "^19.11.0",
+        "tough-cookie": "^4.1.2"
+    }
+}
