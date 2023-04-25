@@ -1,4 +1,4 @@
-import {readFile} from 'fs/promises'
+import { readFile } from 'fs/promises'
 
 export function parseCookie(cookie) {
     return cookie.split('; ').map(item => {
@@ -6,7 +6,7 @@ export function parseCookie(cookie) {
         return {
             name,
             value: value.join('='),
-            domain: 'yiyan.baidu.com'
+            domain: 'yiyan.baidu.com',
         }
     })
 }
