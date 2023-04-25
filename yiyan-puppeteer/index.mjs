@@ -24,7 +24,9 @@ export class YiyanPuppeteer {
         await page.setCookie(...this.#cookie)
         await page.goto('https://yiyan.baidu.com')
 
-        const textarea = await page.waitForSelector('#dialogue-input')
+        const textarea = await page.waitForSelector('#dialogue-input', {
+            timeout: this.#timeout,
+        })
         await textarea.type(message)
         await page.evaluate(async () => {
             function getParentNextSibling(element) {
