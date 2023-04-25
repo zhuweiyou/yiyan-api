@@ -16,7 +16,7 @@ export class YiyanPuppeteer {
         const browser = await puppeteer.launch({
             headless: this.#headless,
             ignoreDefaultArgs: ['--enable-automation'],
-            args: ['--disable-blink-features=AutomationControlled'],
+            args: ['--disable-blink-features=AutomationControlled', '--no-sandbox', '--disable-setuid-sandbox'],
         })
 
         const page = await browser.newPage()
