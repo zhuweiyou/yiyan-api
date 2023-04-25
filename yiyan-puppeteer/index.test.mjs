@@ -1,12 +1,7 @@
-import { fileURLToPath } from 'url'
-import { dirname, resolve } from 'path'
-import { YiyanPuppeteer } from './index.mjs'
-import { readCookie } from './cookie.mjs'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import {YiyanPuppeteer} from './index.mjs'
 
 const yiyan = new YiyanPuppeteer({
-    cookie: await readCookie(resolve(__dirname, 'cookie.txt')),
+    cookie: process.env.YIYAN_PUPPETEER_COOKIE,
 })
 
-console.log(await yiyan.prompt('帮我画个猫'))
+console.log(await yiyan.sendMessage('帮我画个猫'))

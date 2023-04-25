@@ -12,7 +12,7 @@ export class YiyanPuppeteer {
         this.#headless = headless
     }
 
-    async prompt(message) {
+    async sendMessage(prompt) {
         const browser = await puppeteer.launch({
             headless: this.#headless,
             ignoreDefaultArgs: ['--enable-automation'],
@@ -27,7 +27,7 @@ export class YiyanPuppeteer {
         const textarea = await page.waitForSelector('#dialogue-input', {
             timeout: this.#timeout,
         })
-        await textarea.type(message)
+        await textarea.type(prompt)
         await page.evaluate(async () => {
             function getParentNextSibling(element) {
                 const parent = element.parentNode
