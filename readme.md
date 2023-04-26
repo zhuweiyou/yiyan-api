@@ -33,7 +33,7 @@ BASE_URL `http://localhost:3000`
 
 POST `/headless`
 
-- `cookie` 前面步骤获取到的 cookie 字符串
+- `cookie` 前面步骤获取到的 Cookie
 - `prompt` 提问内容
 
 成功响应
