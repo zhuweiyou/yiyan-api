@@ -1,16 +1,17 @@
 import express from 'express'
 import 'express-async-errors'
-import {YiyanPuppeteer} from "./yiyan-puppeteer/index.mjs";
+import {headless} from "./headless.mjs";
 
 const app = express()
 app.use(express.urlencoded({extended: false}))
 
-app.post('/yiyan-puppeteer', async (req, res) => {
-    const {prompt} = req.body
-    const yiyan = new YiyanPuppeteer({
-        cookie: process.env.YIYAN_PUPPETEER_COOKIE,
+app.post('/send_message', async (req, res) => {
+    const {prompt, cookie} = req.body
+    const text = await headless({
+        cookie,
+        prompt,
     })
-    res.json({message: await yiyan.sendMessage(prompt)})
+    res.json({text})
 })
 
 app.use((err, req, res, next) => {
