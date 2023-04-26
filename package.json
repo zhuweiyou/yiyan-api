@@ -4,7 +4,8 @@
     "version": "0.0.0",
     "description": "Yiyan API",
     "scripts": {
-        "start": "node index.mjs"
+        "start": "node index.mjs",
+        "test": "node headless_test.mjs"
     },
     "dependencies": {
         "puppeteer": "^19.11.0",

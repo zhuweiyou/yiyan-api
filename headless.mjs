@@ -1,6 +1,6 @@
-import puppeteer, {KnownDevices} from 'puppeteer'
+import puppeteer, { KnownDevices } from 'puppeteer'
 
-export async function headless({cookie, timeout = 1000 * 30, headless = 'new', prompt}) {
+export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', prompt }) {
     let browser
     try {
         browser = await puppeteer.launch({
@@ -44,9 +44,7 @@ export async function headless({cookie, timeout = 1000 * 30, headless = 'new', p
             async response => {
                 if (response.url().startsWith('https://yiyan.baidu.com/eb/chat/query')) {
                     const json = await response.json()
-                    if (json.data.is_end === 1) {
-                        return true
-                    }
+                    return json.data.is_end === 1
                 }
             },
             {
@@ -63,12 +61,15 @@ export async function headless({cookie, timeout = 1000 * 30, headless = 'new', p
 }
 
 function parse_cookie(cookie) {
-    return cookie.trim().split('; ').map(item => {
-        const [name, ...value] = item.split('=')
-        return {
-            name,
-            value: value.join('='),
-            domain: 'yiyan.baidu.com',
-        }
-    })
+    return cookie
+        .trim()
+        .split('; ')
+        .map(item => {
+            const [name, ...value] = item.split('=')
+            return {
+                name,
+                value: value.join('='),
+                domain: 'yiyan.baidu.com',
+            }
+        })
 }
