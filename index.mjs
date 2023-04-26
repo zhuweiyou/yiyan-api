@@ -5,7 +5,7 @@ import {headless} from "./headless.mjs";
 const app = express()
 app.use(express.urlencoded({extended: false}))
 
-app.post('/send_message', async (req, res) => {
+app.post('/headless', async (req, res) => {
     const {prompt, cookie} = req.body
     const text = await headless({
         cookie,

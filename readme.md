@@ -8,17 +8,18 @@
 
 ### 安装依赖并运行
 
+安装 Node.js v18 环境
+
 ```bash
 npm install
 npm start
 ```
-> 如果安装失败请参考这里解决 <https://pptr.dev/troubleshooting>
+
+> 如果 install 失败请参考这里解决 <https://pptr.dev/troubleshooting>
 
 ### Docker 运行
 
-```bash
-# 目前暂未发布到 Docker Hub, 已提供 dockerfile, 你可以自行 docker build
-```
+> 目前暂未发布到 Docker Hub, 已提供 dockerfile, 你可以自行 docker build
 
 ### 登录获取 Cookie
 
@@ -30,7 +31,7 @@ npm start
 
 BASE_URL `http://localhost:3000`
 
-POST `/send_message`
+POST `/headless`
 
 - `cookie` 前面步骤获取到的 cookie 字符串
 - `prompt` 提问内容
