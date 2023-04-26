@@ -4,10 +4,11 @@
     "version": "0.0.0",
     "description": "Yiyan API",
     "scripts": {
-        "yiyan-puppeteer": "node ./yiyan-puppeteer/index.test.mjs"
+        "start": "node index.mjs"
     },
     "dependencies": {
         "puppeteer": "^19.11.0",
-        "tough-cookie": "^4.1.2"
+        "express": "^4.18.2",
+        "express-async-errors": "^3.1.1"
     }
 }
