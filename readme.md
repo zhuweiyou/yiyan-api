@@ -52,6 +52,6 @@ POST `/headless`
 }
 ```
 
-![文字提问](https://user-images.githubusercontent.com/8413791/234451345-fa600f84-8c1c-4f04-be04-834a7f12fc26.png)
+![文本](https://user-images.githubusercontent.com/8413791/234453028-eb95e54a-e0b0-4ccd-ac8f-645797d97672.png)
 
-![画图提问](https://user-images.githubusercontent.com/8413791/234451353-f2a7459e-5e72-45cb-bf9f-3145c9551348.png)
+![图片](https://user-images.githubusercontent.com/8413791/234453032-d5d33917-a72c-4412-b3f8-0d4c90540a1c.png)
