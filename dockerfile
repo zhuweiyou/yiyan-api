@@ -4,8 +4,6 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/re
 
 RUN apk add -U tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && apk del tzdata
 
-COPY fzlthjw.ttf /usr/share/fonts/
-
 RUN apk add --no-cache \
   chromium \
   nss \
