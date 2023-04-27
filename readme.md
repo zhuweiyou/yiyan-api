@@ -17,9 +17,7 @@ npm start
 
 ### Docker 运行
 
-```bash
-docker run -d -p 3000:3000 zhuweiyou/yiyan-api:20230426
-```
+> 已提供 dockerfile, 可自行 docker build
 
 ### 登录获取 Cookie
 
