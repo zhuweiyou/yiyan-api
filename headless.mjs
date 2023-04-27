@@ -18,7 +18,7 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
             return body_text.includes('登录') && body_text.includes('加入体验')
         })
         if (need_login) {
-            throw new Error('未登录')
+            throw new Error('cookie失效, 请重新登录')
         }
 
         const message_input = await page.waitForSelector('#dialogue-input', {

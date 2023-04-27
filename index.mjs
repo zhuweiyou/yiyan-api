@@ -19,7 +19,7 @@ app.post('/headless', async (req, res) => {
         prompt,
     })
     if (!text) {
-        throw new Error('响应为空')
+        throw new Error('文心一言未返回内容')
     }
 
     res.json({ text })
