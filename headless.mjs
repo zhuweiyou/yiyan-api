@@ -14,7 +14,7 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
 
         if (headless) {
             await page.setRequestInterception(true)
-            page.on('request', (request) => {
+            page.on('request', request => {
                 if (['stylesheet', 'font', 'image'].includes(request.resourceType())) {
                     request.abort()
                 } else {
@@ -66,7 +66,13 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
         const json = await response.json()
 
         // 不知道应该取 text 还是 content, 看起来是一样的?
-        return String(json.data.text || json.data.content || '').trim()
+        let text = String(json.data.text || json.data.content || '').trim()
+        const is_image = `?x-bce-process=style/wm_ai`
+        if (text.includes(is_image)) {
+            text = text.replace(is_image, `?x-bce-process=`)
+        }
+
+        return text
     } finally {
         browser?.close()
     }
