@@ -1,6 +1,6 @@
-import puppeteer, { KnownDevices } from 'puppeteer'
+import puppeteer, {KnownDevices} from 'puppeteer'
 
-export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', prompt }) {
+export async function headless({cookie, timeout = 1000 * 30, headless = 'new', prompt}) {
     let browser
     try {
         browser = await puppeteer.launch({
@@ -69,7 +69,7 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
         const text = String(json.data.text || json.data.content || '').trim()
         const image = text.match(/<img src="(.*?)"/)
         if (image) {
-            return {text, image: image[1].replace('=style/wm_ai', '')}
+            return {text, image: image[1]?.split('?')[0]?.replace('http://', 'https://')}
         }
 
         return {text}
