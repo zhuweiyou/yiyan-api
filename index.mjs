@@ -14,7 +14,7 @@ app.post('/headless', async (req, res) => {
         throw new Error('cookie 必填')
     }
 
-    const text = await headless({
+    const {text, image} = await headless({
         cookie,
         prompt,
     })
@@ -22,7 +22,7 @@ app.post('/headless', async (req, res) => {
         throw new Error('文心一言未返回内容')
     }
 
-    res.json({ text })
+    res.json({ text, image })
 })
 
 app.use((err, req, res, next) => {

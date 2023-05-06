@@ -38,7 +38,8 @@ POST `/headless`
 
 ```json
 {
-    "text": "文心一言的回答"
+    "text": "文本内容",
+    "image": "https://图片地址(作图时会返回)"
 }
 ```
 

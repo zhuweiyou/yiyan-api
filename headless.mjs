@@ -66,13 +66,13 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
         const json = await response.json()
 
         // 不知道应该取 text 还是 content, 看起来是一样的?
-        let text = String(json.data.text || json.data.content || '').trim()
-        const is_image = `?x-bce-process=style/wm_ai`
-        if (text.includes(is_image)) {
-            text = text.replace(is_image, `?x-bce-process=`)
+        const text = String(json.data.text || json.data.content || '').trim()
+        const image = text.match(/<img src="(.*?)"/)
+        if (image) {
+            return {text, image: image[1].replace('=style/wm_ai', '')}
         }
 
-        return text
+        return {text}
     } finally {
         browser?.close()
     }
