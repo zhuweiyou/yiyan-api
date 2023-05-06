@@ -11,6 +11,18 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
         const page = await browser.newPage()
         await page.emulate(KnownDevices['iPhone 12 Pro Max'])
         await page.setCookie(...parse_cookie(cookie))
+
+        if (headless) {
+            await page.setRequestInterception(true)
+            page.on('request', (request) => {
+                if (['stylesheet', 'font', 'image'].includes(request.resourceType())) {
+                    request.abort()
+                } else {
+                    request.continue()
+                }
+            })
+        }
+
         await page.goto('https://yiyan.baidu.com')
 
         const need_login = await page.evaluate(() => {
