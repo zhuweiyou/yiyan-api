@@ -1,6 +1,6 @@
 import puppeteer, { KnownDevices } from 'puppeteer'
 
-export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', prompt }) {
+export async function headless({ cookie, timeout = 1000 * 60, headless = 'new', prompt }) {
     let browser
     try {
         browser = await puppeteer.launch({
@@ -52,10 +52,12 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
             send_button.click()
         })
 
-        const response = await page.waitForResponse(
+        const result = []
+        await page.waitForResponse(
             async response => {
                 if (response.url().startsWith('https://yiyan.baidu.com/eb/chat/query')) {
                     const json = await response.json()
+                    result.push(json.data.text)
                     return json.data.is_end === 1
                 }
             },
@@ -63,10 +65,7 @@ export async function headless({ cookie, timeout = 1000 * 30, headless = 'new', 
                 timeout,
             }
         )
-        const json = await response.json()
-
-        // 不知道应该取 text 还是 content, 看起来是一样的?
-        const text = String(json.data.text || json.data.content || '').trim()
+        const text = result.join('\n')
         const image = text.match(/<img src="(.*?)"/)
         if (image) {
             return {text, image: image[1].replace('=style/wm_ai', '')}
