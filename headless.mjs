@@ -57,7 +57,10 @@ export async function headless({ cookie, timeout = 1000 * 60, headless = 'new', 
             async response => {
                 if (response.url().startsWith('https://yiyan.baidu.com/eb/chat/query')) {
                     const json = await response.json()
-                    result.push(json.data.text)
+                    const text = json.data?.text?.trim()
+                    if (text) {
+                        result.push(text)
+                    }
                     return json.data.is_end === 1
                 }
             },
