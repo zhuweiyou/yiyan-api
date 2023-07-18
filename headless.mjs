@@ -1,6 +1,6 @@
-import puppeteer, { KnownDevices } from 'puppeteer'
+import puppeteer, {KnownDevices} from 'puppeteer'
 
-export async function headless({ cookie, timeout = 1000 * 60, headless = 'new', prompt }) {
+export async function headless({cookie, timeout = 1000 * 60, headless = 'new', prompt}) {
     let browser
     try {
         browser = await puppeteer.launch({
@@ -52,29 +52,29 @@ export async function headless({ cookie, timeout = 1000 * 60, headless = 'new', 
             send_button.click()
         })
 
-        const result = []
+        let text = null
         await page.waitForResponse(
             async response => {
-                if (response.url().startsWith('https://yiyan.baidu.com/eb/chat/query')) {
-                    const json = await response.json()
-                    const text = json.data?.text
-                    if (text) {
-                        result.push(text)
+                if (response.url().startsWith('https://yiyan.baidu.com/eb/chat/conversation')) {
+                    try {
+                        // 参考 conversation_example.txt 处理响应
+                        const response_text = await response.text()
+                        const last_line = response_text.trim().split('\n').pop()
+                        const json_string = last_line.replace('data:', '')
+                        const json_object = JSON.parse(json_string)
+                        text = json_object.data.tokens_all
+                        return json_object.data.is_end === 1
+                    } catch (e) {
+                        console.error(e)
                     }
-                    return json.data?.is_end === 1
                 }
             },
             {
                 timeout,
             }
         )
-        const text = result.join('\n')
         const image = text.match(/<img src="(.*?)"/)
-        if (image) {
-            return {text, image: image[1].replace('=style/wm_ai', '')}
-        }
-
-        return {text}
+        return {text, image: image ? image[1].replace('=style/wm_ai', '') : null}
     } finally {
         browser?.close()
     }

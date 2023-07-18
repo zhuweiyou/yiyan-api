@@ -36,10 +36,10 @@ POST `/headless`
 
 成功响应
 
-```json
+```json5
 {
     "text": "文本内容",
-    "image": "https://图片地址(作图时会返回)"
+    "image": "https://图片地址" // 作图时会返回, 没有图返回 null
 }
 ```
 
