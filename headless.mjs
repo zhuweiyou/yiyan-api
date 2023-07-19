@@ -55,24 +55,39 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
         let text = null
         await page.waitForResponse(
             async response => {
-                if (response.url().startsWith('https://yiyan.baidu.com/eb/chat/conversation')) {
-                    try {
-                        // 参考 conversation_example.txt 处理响应
+                try {
+                    const response_url = response.url()
+                    if (response_url.startsWith('https://yiyan.baidu.com/eb/chat/conversation')) {
+                        // event-stream
+                        // 参考 chat_conversation.txt
                         const response_text = await response.text()
                         const last_line = response_text.trim().split('\n').pop()
                         const json_string = last_line.replace('data:', '')
                         const json_object = JSON.parse(json_string)
-                        text = json_object.data.tokens_all
-                        return json_object.data.is_end === 1
-                    } catch (e) {
-                        console.error(e)
+                        if (json_object.data.is_end === 1) {
+                            text = json_object.data.tokens_all
+                            return true
+                        }
                     }
+
+                    if (response_url.startsWith('https://yiyan.baidu.com/eb/chat/query')) {
+                        // json api
+                        // 参考 chat_query.json
+                        const response_json = await response.json()
+                        if (response_json.data.is_end === 1) {
+                            text = response_json.data.tokens_all
+                            return true
+                        }
+                    }
+                } catch (e) {
+                    console.error(e)
                 }
             },
             {
                 timeout,
             }
         )
+
         const image = text.match(/<img src="(.*?)"/)
         return {text, image: image ? image[1].replace('=style/wm_ai', '') : null}
     } finally {

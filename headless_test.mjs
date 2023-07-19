@@ -1,3 +1,4 @@
+// 设置环境变量 export YIYAN_COOKIE=xxxx 之后运行 npm test 测试
 import { headless } from './headless.mjs'
 
 console.log(
