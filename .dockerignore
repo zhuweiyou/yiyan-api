@@ -2,4 +2,5 @@
 .vscode
 .DS_Store
 node_modules
-conversation_example.txt
+chat_conversation.txt
+chat_query.json
