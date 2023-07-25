@@ -15,10 +15,10 @@ npm start
 
 > 如果 install 失败请参考这里解决 <https://pptr.dev/troubleshooting>
 
-### Docker 运行
+### Docker 一键部署
 
 ```bash
-docker run -d zhuweiyou/yiyan-api:latest -p 3000:3000
+docker run -d --restart=always -p 3000:3000 --name yiyan-api zhuweiyou/yiyan-api:latest
 ```
 
 ### 登录获取 Cookie
