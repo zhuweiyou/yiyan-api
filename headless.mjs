@@ -89,7 +89,7 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
         )
 
         const image = text.match(/<img src="(.*?)"/)
-        return {text, image: image ? image[1].replace('=style/wm_ai', '') : null}
+        return {text, image: image ? image[1].replace('=style/wm_ai', '').replace('http://', 'https://') : null}
     } finally {
         browser?.close()
     }
