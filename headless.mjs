@@ -27,6 +27,14 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
 
         const need_login = await page.evaluate(() => {
             const body_text = document.body.innerText
+            if (body_text.includes('接受协议') && body_text.includes('暂时退出')) {
+                for (let div of document.querySelectorAll('div')) {
+                    if (div.textContent.includes('接受协议')) {
+                        div?.click()
+                    }
+                }
+            }
+
             return body_text.includes('登录') && body_text.includes('加入体验')
         })
         if (need_login) {
