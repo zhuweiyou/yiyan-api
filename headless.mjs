@@ -1,4 +1,5 @@
 import puppeteer, {KnownDevices} from 'puppeteer'
+import sleep from 'then-sleep'
 
 export async function headless({cookie, timeout = 1000 * 60, headless = 'new', prompt}) {
     let browser
@@ -9,7 +10,7 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             args: ['--disable-blink-features=AutomationControlled', '--no-sandbox', '--disable-setuid-sandbox'],
         })
         const page = await browser.newPage()
-        await page.emulate(KnownDevices['iPhone 12 Pro Max'])
+        await page.emulate(KnownDevices['iPhone SE'])
         await page.setCookie(...parse_cookie(cookie))
 
         if (headless) {
@@ -28,14 +29,14 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
         const need_login = await page.evaluate(() => {
             const body_text = document.body.innerText
             if (body_text.includes('接受协议') && body_text.includes('暂时退出')) {
-                for (let div of document.querySelectorAll('div')) {
+                for (const div of document.querySelectorAll('div')) {
                     if (div.textContent.includes('接受协议')) {
                         div?.click()
                     }
                 }
             }
 
-            return body_text.includes('登录') && body_text.includes('加入体验')
+            return body_text.includes('登录') && (body_text.includes('加入体验') || body_text.includes('开始体验'))
         })
         if (need_login) {
             throw new Error('cookie失效, 请重新登录')
@@ -45,6 +46,8 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             timeout,
         })
         await message_input.type(prompt)
+        await sleep(1000)
+
         await page.evaluate(async () => {
             function get_parent_next_sibling(element) {
                 const parent = element.parentNode
@@ -65,25 +68,16 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             async response => {
                 try {
                     const response_url = response.url()
-                    if (response_url.startsWith('https://yiyan.baidu.com/eb/chat/conversation')) {
+                    console.log(response_url)
+                    if (response_url.startsWith('https://yiyan.baidu.com/eb/chat/conversation/v2')) {
                         // event-stream
                         // 参考 chat_conversation.txt
                         const response_text = await response.text()
                         const last_line = response_text.trim().split('\n').pop()
                         const json_string = last_line.replace('data:', '')
                         const json_object = JSON.parse(json_string)
-                        if (json_object.data.is_end === 1) {
+                        if (json_object?.data?.is_end === 1) {
                             text = json_object.data.tokens_all
-                            return true
-                        }
-                    }
-
-                    if (response_url.startsWith('https://yiyan.baidu.com/eb/chat/query')) {
-                        // json api
-                        // 参考 chat_query.json
-                        const response_json = await response.json()
-                        if (response_json.data.is_end === 1) {
-                            text = response_json.data.tokens_all
                             return true
                         }
                     }

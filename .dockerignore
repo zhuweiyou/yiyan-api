@@ -3,4 +3,3 @@
 .DS_Store
 node_modules
 chat_conversation.txt
-chat_query.json
