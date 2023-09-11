@@ -24,16 +24,25 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             })
         }
 
-        await page.goto('https://yiyan.baidu.com')
+        await page.goto('https://yiyan.baidu.com', {waitUntil: 'networkidle0'})
 
         const need_login = await page.evaluate(() => {
             const body_text = document.body.innerText
             if (body_text.includes('接受协议') && body_text.includes('暂时退出')) {
-                for (const div of document.querySelectorAll('div')) {
-                    if (div.textContent.includes('接受协议')) {
-                        div?.click()
+                for (const element of document.querySelectorAll('div, span')) {
+                    if (element.textContent === '接受协议') {
+                        element?.click()
                     }
                 }
+            }
+
+            if (document.querySelector(`img[src*="https://himg.bdimg.com/sys/portrait"]`)) {
+                for (const element of document.querySelectorAll('div, span')) {
+                    if (element.textContent === '开始体验') {
+                        element?.click()
+                    }
+                }
+                return false
             }
 
             return body_text.includes('登录') && (body_text.includes('加入体验') || body_text.includes('开始体验'))
@@ -45,6 +54,15 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
         const message_input = await page.waitForSelector('#dialogue-input', {
             timeout,
         })
+
+        await page.evaluate(() => {
+            for (const element of document.querySelectorAll('div, span')) {
+                if (element.textContent === '我知道了') {
+                    element?.click()
+                }
+            }
+        })
+
         await message_input.type(prompt)
         await sleep(1000)
 
@@ -68,7 +86,7 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             async response => {
                 try {
                     const response_url = response.url()
-                    console.log(response_url)
+                    // console.log(response_url)
                     if (response_url.startsWith('https://yiyan.baidu.com/eb/chat/conversation/v2')) {
                         // event-stream
                         // 参考 chat_conversation.txt
@@ -104,9 +122,10 @@ function parse_cookie(cookie) {
         .map(item => {
             const [name, ...value] = item.split('=')
             return {
-                name,
+                name: name?.trim(),
                 value: value.join('='),
                 domain: 'yiyan.baidu.com',
             }
         })
+        .filter(item => item.name)
 }
