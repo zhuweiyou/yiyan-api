@@ -29,14 +29,19 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
         const need_login = await page.evaluate(() => {
             const body_text = document.body.innerText
             if (body_text.includes('接受协议') && body_text.includes('暂时退出')) {
-                for (const div of document.querySelectorAll('div')) {
-                    if (div.textContent.includes('接受协议')) {
-                        div?.click()
+                for (const element of document.querySelectorAll('div, span')) {
+                    if (element.textContent.includes('接受协议')) {
+                        element?.click()
                     }
                 }
             }
 
             if (document.querySelector(`img[src*="https://himg.bdimg.com/sys/portrait"]`)) {
+                for (const element of document.querySelectorAll('div, span')) {
+                    if (element.textContent.includes('开始体验')) {
+                        element?.click()
+                    }
+                }
                 return false
             }
 
