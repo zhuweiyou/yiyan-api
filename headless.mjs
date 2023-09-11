@@ -35,6 +35,11 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
                     }
                 }
             }
+
+            if (document.querySelector(`img[src*="https://himg.bdimg.com/sys/portrait"]`)) {
+                return false
+            }
+
             return body_text.includes('登录') && (body_text.includes('加入体验') || body_text.includes('开始体验'))
         })
         if (need_login) {
