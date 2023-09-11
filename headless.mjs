@@ -30,7 +30,7 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             const body_text = document.body.innerText
             if (body_text.includes('接受协议') && body_text.includes('暂时退出')) {
                 for (const element of document.querySelectorAll('div, span')) {
-                    if (element.textContent.includes('接受协议')) {
+                    if (element.textContent === '接受协议') {
                         element?.click()
                     }
                 }
@@ -38,7 +38,7 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
 
             if (document.querySelector(`img[src*="https://himg.bdimg.com/sys/portrait"]`)) {
                 for (const element of document.querySelectorAll('div, span')) {
-                    if (element.textContent.includes('开始体验')) {
+                    if (element.textContent === '开始体验') {
                         element?.click()
                     }
                 }
@@ -54,6 +54,15 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
         const message_input = await page.waitForSelector('#dialogue-input', {
             timeout,
         })
+
+        await page.evaluate(() => {
+            for (const element of document.querySelectorAll('div, span')) {
+                if (element.textContent === '我知道了') {
+                    element?.click()
+                }
+            }
+        })
+
         await message_input.type(prompt)
         await sleep(1000)
 
