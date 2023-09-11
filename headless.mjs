@@ -104,9 +104,10 @@ function parse_cookie(cookie) {
         .map(item => {
             const [name, ...value] = item.split('=')
             return {
-                name,
+                name: name?.trim(),
                 value: value.join('='),
                 domain: 'yiyan.baidu.com',
             }
         })
+        .filter(item => item.name)
 }
