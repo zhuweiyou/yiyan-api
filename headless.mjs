@@ -77,7 +77,7 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             async response => {
                 try {
                     const response_url = response.url()
-                    console.log(response_url)
+                    // console.log(response_url)
                     if (response_url.startsWith('https://yiyan.baidu.com/eb/chat/conversation/v2')) {
                         // event-stream
                         // 参考 chat_conversation.txt
