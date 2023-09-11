@@ -24,7 +24,7 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
             })
         }
 
-        await page.goto('https://yiyan.baidu.com')
+        await page.goto('https://yiyan.baidu.com', {waitUntil: 'networkidle0'})
 
         const need_login = await page.evaluate(() => {
             const body_text = document.body.innerText
@@ -35,7 +35,6 @@ export async function headless({cookie, timeout = 1000 * 60, headless = 'new', p
                     }
                 }
             }
-
             return body_text.includes('登录') && (body_text.includes('加入体验') || body_text.includes('开始体验'))
         })
         if (need_login) {
